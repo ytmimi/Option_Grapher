@@ -1,0 +1,85 @@
+/*
+CHARLESTON GREEN: #262C2C
+DARK IMPERIAL BLUE: #0E466D
+TEAL BLUE: #396787
+*/
+
+#title{
+	text-align: center;
+	margin-top: 10px;
+	margin-bottom: 50px;
+}
+
+#option_form{
+	margin-top: 50px;
+	text-align: center;
+}
+
+
+.chart-container{
+	margin-top: 50px;
+	height:400px; 
+	width:400px;
+}
+
+.btn-dark{
+	background-color: #0E466D;
+}
+.btn-dark:hover{
+	/*lighter than the original*/
+	background-color: #396787;
+}
+
+
+.errorlist{
+	padding-left: 0;
+	margin-bottom: 0;
+}
+
+.errorlist li{
+	list-style-type: none;
+	text-decoration: none;
+	font-size: 10;
+	color:red;
+}
+
+#greeks{
+	margin: auto;
+	margin-bottom: 50px;
+	margin-top: 100px;
+	border-spacing:10px;
+
+}
+
+td, th {
+	height: 50px;
+	width:100px;
+	text-align: center;
+	border-collapse: separate;
+    border-spacing: 15px;
+}
+
+
+th{
+	background-color: #0E466D;
+	color: white;
+	border-top-right-radius: 15px;
+	border-top-left-radius: 15px;
+	border-right: 2px solid white;
+	border-left: 2px solid white;
+}
+
+
+td{
+	border-right:2px solid white;
+	border-left: 2px solid white;
+	border-bottom: 2px solid #0E466D;
+}
+
+
+
+
+
+
+
+

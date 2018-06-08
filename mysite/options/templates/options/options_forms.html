@@ -1,0 +1,56 @@
+{% extends 'options/options_base.html' %}
+<!-- load the custom filter -->
+{% load options_filters %}
+{% load staticfiles %}
+
+
+{% block content %}
+	<!-- form -->
+	<div class="col-lg-4 col-md-6">
+		<form id="option_form" method="POST">
+			{% csrf_token %}
+			{{form.as_p}}
+			<input class="btn btn-dark" type="submit" name="Add Option">
+		</form>
+	</div>
+
+	<!-- Chart -->
+	<div class="col-lg-8 col-md-6 chart-container">		
+		<canvas id="option_chart"></canvas>
+	</div>
+
+	<!-- passes data variables to js -->
+	{% if payoff %}
+	<script type="text/javascript">
+		var payoff = JSON.parse("{{payoff}}".replace(/(&quot\;)/g,"\""));
+	</script>
+	{% else %}
+	<script type="text/javascript">
+		var payoff = {x:[], y:[]};
+	</script>
+	{% endif %}
+	
+	<!-- Table full of Greek information -->
+	<div class="col-md-12">
+	{% if option %}
+		<table id='greeks'>
+			<thead>
+				{% for key in option %}
+				<th>{{key}}</th>
+				{% endfor %}
+			</thead>
+			<tbody>
+				<tr>
+					<!-- uses custom filter -->
+					{% for key in option %}
+					<td>
+						{{option|dict_key:key}} 
+					</td>
+					{% endfor %}
+				</tr>
+			</tbody>
+		</table>
+	</div>
+	{% endif %}
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.4.0/Chart.min.js"></script>
+{% endblock %}

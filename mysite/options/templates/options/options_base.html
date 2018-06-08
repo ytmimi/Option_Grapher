@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+
+{% load staticfiles %}
+
+{% block custom_head %}
+	<link rel="stylesheet" type="text/css" href="{% static 'css/option_master.css'%}">
+{% endblock %}
+
+{% block body_block %}
+	<div class="row">
+	{% block content %}{% endblock %}
+	</div>
+
+<script type="text/javascript" src="{% static 'js/options_master.js' %}"></script>
+{% endblock %}

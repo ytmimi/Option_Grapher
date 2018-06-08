@@ -1,0 +1,27 @@
+/*Colors
+CHARLESTON GREEN #262C2C
+DARK IMPERIAL BLUE: #0E466D
+*/
+body{
+	font-family: 'Roboto Condensed', sans-serif;
+}
+
+.nav-list{
+	list-style-type: none;
+	text-decoration: none;
+	/*table-layout: inline;*/
+}
+
+.mynav{
+	background-color: #0E466D;
+	color: white;
+}
+
+.nav-link{
+	color: white;
+	border-top: 3px solid transparent;
+}
+.nav-link:hover{
+	color: white;
+	border-top: 3px solid white;
+}
