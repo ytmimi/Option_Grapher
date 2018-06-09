@@ -24,17 +24,21 @@ class Test_Option_Input_View(SimpleTestCase):
 		'interest_rate':.012,
 		'exp_date':dt.date.today()+dt.timedelta(days=30),
 		}
+		self.url = reverse('options:form')
+		self.get_response = self.client.get(self.url)
+		self.post_response = self.client.post(self.url, self.valid_input)
 
 	def test_option_input_get(self):
-		url = reverse('options:form')
-		response = self.client.get(url)
-		self.assertEqual(response.status_code, 200)
-		
+		self.assertEqual(self.get_response.status_code, 200)
+	
+	def test_correct_template_get(self):
+		self.assertTemplateUsed(self.get_response, 'options/options_forms.html')
 
 	def test_option_input_post(self):
-		url = reverse('options:form')
-		response = self.client.post(url, self.valid_input, follow=True)
-		self.assertEqual(response.status_code, 200)
+		self.assertEqual(self.post_response.status_code, 200)
+
+	def test_correct_template_push(self):
+		self.assertTemplateUsed(self.post_response, 'options/options_forms.html')
 
 
 
