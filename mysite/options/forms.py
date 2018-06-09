@@ -31,28 +31,28 @@ class Option_Form(forms.Form):
 		if data >= 0:
 			return data
 		else:
-			raise forms.ValidationError("Strike price must be positive")
+			raise forms.ValidationError('Strike price must be positive')
 
 	def clean_stock_price(self):
 		data = float(self.cleaned_data['stock_price'])
 		if data >= 0:
 			return data
 		else:
-			raise forms.ValidationError("Stock price must be positive")
+			raise forms.ValidationError('Stock price must be positive')
 
 	def clean_traded_price(self):
 		data = float(self.cleaned_data['traded_price'])
 		if data >= 0:
 			return data
 		else:
-			raise forms.ValidationError("Option price must be positive")
+			raise forms.ValidationError('Option price must be positive')
 
 	def clean_interest_rate(self):
 		data = float(self.cleaned_data['interest_rate'])
 		if data >= 0:
 			return data
 		else:
-			raise forms.ValidationError("Interest rate must be positive")
+			raise forms.ValidationError('Interest rate must be positive')
 
 	def clean_exp_date(self):
 		expiration = self.cleaned_data['exp_date']
@@ -61,7 +61,7 @@ class Option_Form(forms.Form):
 		if diff >=0:
 			return diff
 		else:
-			raise forms.ValidationError("Sorry, expired options can\'t be analysed.")
+			raise forms.ValidationError('Sorry, expired options can\'t be analysed.')
 
 
 
