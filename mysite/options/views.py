@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from wallstreet.blackandscholes import BlackandScholes as BS
-from . import forms
-from . import payoff_functions as pf
+from options import forms
+from options import payoff_functions as pf
 
 # Create your views here.
 def option_input(request):
