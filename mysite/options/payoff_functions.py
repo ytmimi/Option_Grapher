@@ -38,22 +38,6 @@ def put_payoff(strike_price, premium, position, x):
 		payoff = strike_price - x - premium
 	return payoff*position
 
-def payoff_to_json(option_type, position, strike_price, premium,):
-	'''
-	see put_payoff and call_payoff for details on the arguments
-	formats final result to JSON
-	'''
-	# x_list = [x for x in range(0,int(strike_price*2), 5)]
-	x_list = [0, strike_price, 2*strike_price]
-	y_list = []
-	for x in x_list:
-		y = option_payoff(option_type, position, strike_price, premium, x)
-		y_list.append(y)
-	#Using jason.dumps leave me with a string containing:
-	# "[{&quot;x&quot;: 0, &quot;y&quot;: -4.0},...]". Not sure why
-	json_ob = json.dumps({"x": x_list, "y": y_list})
-	return json_ob
-
 
 				
 			

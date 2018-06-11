@@ -31,26 +31,53 @@
 	{% endif %}
 	
 	<!-- Table full of Greek information -->
+	{% if model %}
 	<div class="col-md-12">
-	{% if option %}
 		<table id='greeks'>
 			<thead>
-				{% for key in option %}
-				<th>{{key}}</th>
-				{% endfor %}
+				<th>Position</th>
+				<th>Type</th>
+				<th>Strike Price</th>
+				<th>Stock Price</th>
+				<th>Option Price</th>
+				<th>Interest rate</th>
+				<th>Days Till Expiration</th>
+				<th>Implied Volatility</th>
+				<th>Delta</th>
+				<th>Gamma</th>
+				<th>Vega</th>
+				<th>Theta</th>
+				<th>Rho</th>
+
 			</thead>
 			<tbody>
+				{% for option in model %}
 				<tr>
-					<!-- uses custom filter -->
-					{% for key in option %}
+					<td>{{option.position}}</td>
+					<td>{{option.option_type}}</td>
+					<td>{{option.strike_price}}</td>
+					<td>{{option.stock_price}}</td>
+					<td>{{option.traded_price}}</td>
+					<td>{{option.interest_rate}}</td>
+					<td>{{option.days_till_exp|multiply:365}}</td>
+					<td>{{option.iv}}</td>
+					<td>{{option.delta}}</td>
+					<td>{{option.gamma}}</td>
+					<td>{{option.vega}}</td>
+					<td>{{option.theta}}</td>
+					<td>{{option.rho}}</td>
 					<td>
-						{{option|dict_key:key}} 
+						<a class="btn btn-dark" href="{% url 'options:delete_option' pk=option.pk%}">Delete</a>
 					</td>
-					{% endfor %}
 				</tr>
+				{% endfor%}
 			</tbody>
 		</table>
 	</div>
 	{% endif %}
+
+	
+	
+	
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.4.0/Chart.min.js"></script>
 {% endblock %}
