@@ -1,6 +1,7 @@
 from django import forms
 import datetime as dt
 
+
 class Option_Form(forms.Form):
 	position = forms.ChoiceField(choices=(('Long', 'Long'), ('Short', 'Short')))
 	option_type = forms.ChoiceField(choices=(('Call', 'Call'), ('Put', 'Put')))
@@ -8,7 +9,7 @@ class Option_Form(forms.Form):
 	stock_price = forms.DecimalField(decimal_places=2, )
 	traded_price = forms.DecimalField(decimal_places=2,)
 	interest_rate = forms.DecimalField(decimal_places=4,)
-	exp_date = forms. DateField(label='Expiration Date',
+	exp_date = forms.DateField(label='Expiration Date',
 		input_formats=[
 			'%m/%d/%Y', '%m/%d/%y', '%m-%d-%Y', '%m-%d-%y',
 			'%-m/%d/%Y', '%-m/%d/%y', '%-m-%d-%Y', '%-m-%d-%y',
