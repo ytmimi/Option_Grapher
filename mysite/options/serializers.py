@@ -22,9 +22,10 @@ def option_chart_data():
 
 	for option in option_list:
 		for x in x_list:
-			payoff[x] = payoff[x] + pf.option_payoff(option['type'], option['pos'], option['strike'], option['price'], x)
+			payoff[x] = payoff[x] + pf.option_payoff(option['type'], option['pos'], option['strike'], option['price'], x)	
 
-	data = {'x':[x for x in payoff.keys()], 
-			'y':[y for y in payoff.values()]}
-	print(data)
+	# data = {'x':[x for x in payoff.keys()], 
+	# 		'y':[y for y in payoff.values()]}
+	#converts the payoff dictionary into a list of {x:_, y:_} pairs
+	data = [{'x':x, 'y':y} for x, y in payoff.items()]
 	return json.dumps(data)
