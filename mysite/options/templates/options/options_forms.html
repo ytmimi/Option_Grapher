@@ -26,7 +26,7 @@
 	</script>
 	{% else %}
 	<script type="text/javascript">
-		var payoff = {x:[], y:[]};
+		var payoff = [{x:0, y:0},]
 	</script>
 	{% endif %}
 	
@@ -53,7 +53,11 @@
 			<tbody>
 				{% for option in model %}
 				<tr>
-					<td>{{option.position}}</td>
+					{% if option.position == 1 %}
+					<td>Long</td>
+					{% else %}
+					<td>Short</td>
+					{% endif %}
 					<td>{{option.option_type}}</td>
 					<td>{{option.strike_price}}</td>
 					<td>{{option.stock_price}}</td>
@@ -67,7 +71,7 @@
 					<td>{{option.theta}}</td>
 					<td>{{option.rho}}</td>
 					<td>
-						<a class="btn btn-dark" href="{% url 'options:delete_option' pk=option.pk%}">Delete</a>
+						<a class="btn btn-danger" href="{% url 'options:delete_option' pk=option.pk%}">Remove</a>
 					</td>
 				</tr>
 				{% endfor%}
