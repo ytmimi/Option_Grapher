@@ -10,10 +10,10 @@ def option_chart_data():
 			{'type':option.option_type,
 			'pos':option.position,
 			'strike':option.strike_price,
-			'price':option.traded_price,}
-			)
+			'price':option.traded_price,
+			'quantity':option.quantity, })
 		x_values.append(option.strike_price)
-		x_values.append(option.strike_price*2)	
+		x_values.append(option.strike_price*2)
 
 	x_list = sorted(set(x_values))
 	payoff = {}
@@ -22,7 +22,8 @@ def option_chart_data():
 
 	for option in option_list:
 		for x in x_list:
-			payoff[x] = payoff[x] + pf.option_payoff(option['type'], option['pos'], option['strike'], option['price'], x)	
+			payoff[x] = payoff[x] + pf.option_payoff(option['type'], option['pos'], 
+							option['strike'], option['price'], option['quantity'], x)	
 
 	# data = {'x':[x for x in payoff.keys()], 
 	# 		'y':[y for y in payoff.values()]}

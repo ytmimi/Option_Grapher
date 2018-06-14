@@ -1,14 +1,37 @@
 from django.db import models
 from wallstreet.blackandscholes import BlackandScholes as BS
+from django.core.validators import MinValueValidator
+
+
+def same_option(option):
+	return Option_Model.objects.filter(position=option.position
+		).filter(option_type=option.option_type
+		).filter(strike_price=option.strike_price
+		).filter(stock_price=option.stock_price
+		).filter(traded_price=option.traded_price
+		).filter(interest_rate=option.interest_rate
+		).filter(days_till_exp=option.days_till_exp)
 
 # Create your models here.
 class Option_Model(models.Model):
+	quantity = models.IntegerField(default=1, 
+		validators=[MinValueValidator(1, 'Must be greater than or equal to 1')],
+		)
 	position = models.IntegerField()
-	option_type = models.CharField(max_length=10, choices=(('Call', 'Call'), ('Put', 'Put')))
-	strike_price = models.FloatField()
-	stock_price = models.FloatField()
-	traded_price = models.FloatField()
-	interest_rate = models.FloatField()
+	option_type = models.CharField(max_length=10, default='Call',
+		choices=(('Call', 'Call'), ('Put', 'Put')),)
+	strike_price = models.FloatField(
+		validators=[MinValueValidator(0, 'Must be greater than or equal to 0.')],
+		)
+	stock_price = models.FloatField(
+		validators=[MinValueValidator(0, 'Must be greater than or equal to 0.')],
+		)
+	traded_price = models.FloatField(
+		validators=[MinValueValidator(0, 'Must be greater than or equal to 0.')],
+		)
+	interest_rate = models.FloatField(
+		validators=[MinValueValidator(0, 'Must be greater than or equal to 0.')],
+		)
 	days_till_exp = models.FloatField()
 	iv = models.FloatField(null=True, blank=True)
 	delta = models.FloatField(null=True, blank=True)
@@ -28,19 +51,9 @@ class Option_Model(models.Model):
 		option = BS(self.stock_price, self.strike_price, self.days_till_exp, 
 				self.traded_price, self.interest_rate, str(self.option_type))
 		self.iv = round(option.impvol, 5)
-		self.delta = round(option.delta(), 5)*self.position
-		self.gamma = round(option.gamma(), 5)*self.position
-		self.vega = round(option.vega(), 5)*self.position
-		self.theta = round(option.theta(), 5)*self.position
-		self.rho = round(option.rho(), 5)*self.position
+		self.delta = round(option.delta(), 5)*self.position*self.quantity
+		self.gamma = round(option.gamma(), 5)*self.position*self.quantity
+		self.vega = round(option.vega(), 5)*self.position*self.quantity
+		self.theta = round(option.theta(), 5)*self.position*self.quantity
+		self.rho = round(option.rho(), 5)*self.position*self.quantity
 		super().save(*args, **kwargs)
-
-
-	def is_the_same(self, option_model):
-		return (self.position == option_model.position  
-			and self.option_type == option_model.option_type
-			and self.strike_price == option_model.strike_price
-			and self.stock_price == option_model.stock_price
-			and self.traded_price == option_model.traded_price
-			and self.interest_rate == option_model.interest_rate
-			and self.days_till_exp == option_model.days_till_exp)

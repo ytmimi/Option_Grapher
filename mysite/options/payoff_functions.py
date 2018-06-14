@@ -1,17 +1,17 @@
 import json
 
 #pre defined functions used to calculate option payoffs
-def option_payoff(option_type, position, strike_price, premium, x):
+def option_payoff(option_type, position, strike_price, premium, quantity, x):
 	''' for a given stock price x, the payoff for a call or put is calculated
 		Note: position should be 1 or -1 denoting Long or Short
 	'''
 	if option_type == 'Call':
-		payoff = call_payoff(strike_price, premium, position, x)
+		payoff = call_payoff(strike_price, premium, position, quantity, x)
 	else:
-		payoff = put_payoff(strike_price, premium, position, x)
+		payoff = put_payoff(strike_price, premium, position, quantity, x)
 	return payoff
 
-def call_payoff(strike_price, premium, position, x):
+def call_payoff(strike_price, premium, position, quantity, x):
 	''' 
 	strike_price- float representing the excersie price of the option
 	premium- float representing the price paid for the option
@@ -23,9 +23,9 @@ def call_payoff(strike_price, premium, position, x):
 	else:
 		payoff = x - strike_price - premium
 
-	return payoff*position
+	return payoff*position*quantity
 
-def put_payoff(strike_price, premium, position, x):
+def put_payoff(strike_price, premium, position, quantity, x):
 	'''
 	strike_price- float representing the excersie price of the option
 	premium- float representing the price paid for the option
@@ -36,7 +36,7 @@ def put_payoff(strike_price, premium, position, x):
 		payoff = -premium
 	else:
 		payoff = strike_price - x - premium
-	return payoff*position
+	return payoff*position*quantity
 
 
 				
