@@ -37,6 +37,7 @@
 			<thead>
 				<th>Position</th>
 				<th>Type</th>
+				<th>Quantity</th>
 				<th>Strike Price</th>
 				<th>Stock Price</th>
 				<th>Option Price</th>
@@ -59,6 +60,7 @@
 					<td>Short</td>
 					{% endif %}
 					<td>{{option.option_type}}</td>
+					<td>{{option.quantity}}</td>
 					<td>{{option.strike_price}}</td>
 					<td>{{option.stock_price}}</td>
 					<td>{{option.traded_price}}</td>
