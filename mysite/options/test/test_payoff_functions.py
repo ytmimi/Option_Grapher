@@ -9,114 +9,92 @@ import payoff_functions as pf
 
 
 class Test_Payoff_Functions(unittest.TestCase):
+	@classmethod 
+	def setUpClass(cls):
+		cls.strike_price = 50 
+		cls.premeium = 1.24
+		cls.quantity = 1
+		cls.x = 50
+
 
 	def test_long_call_payoff_OTM(self):
 		# long call _/
-		strike_price=50
-		premeium=1.24
 		position=1
 		for x in range(45, 0, -5):
-			payoff = pf.call_payoff(strike_price, premeium, position, x)
-			self.assertTrue(payoff == -premeium)
+			payoff = pf.call_payoff(self.strike_price, self.premeium, position, self.quantity, x)
+			self.assertTrue(payoff == -self.premeium)
 
 	def test_long_call_payoff_ATM(self):
 		# long call _/
-		strike_price=50
-		premeium=1.24
 		position=1
-		x=50
-		payoff = pf.call_payoff(strike_price, premeium, position, x)
-		self.assertTrue(payoff == -premeium)
+		payoff = pf.call_payoff(self.strike_price, self.premeium, position, self.quantity, self.x)
+		self.assertTrue(payoff == -self.premeium)
 
 	def test_long_call_payoff_ITM(self):
-		# long call _/
-		strike_price=50
-		premeium=1.24
 		position=1
-		for x in range(55, 2*strike_price, 5):
-			payoff = pf.call_payoff(strike_price, premeium, position, x)
-			self.assertTrue(payoff == x-strike_price-premeium)
+		for x in range(55, 2*self.strike_price, 5):
+			payoff = pf.call_payoff(self.strike_price, self.premeium, position, self.quantity, x)
+			self.assertTrue(payoff == x-self.strike_price-self.premeium)
 
 	def test_short_call_payoff_OTM(self):
 		# short call -\
-		strike_price=50
-		premeium=1.24
 		position=-1
-		for x in range(55, 2*strike_price, 5):
-			payoff = pf.call_payoff(strike_price, premeium, position, x)
-			self.assertTrue(payoff == -(x-strike_price-premeium))
+		for x in range(55, 2*self.strike_price, 5):
+			payoff = pf.call_payoff(self.strike_price, self.premeium, position, self.quantity, x)
+			self.assertTrue(payoff == -(x-self.strike_price-self.premeium))
 
 	def test_short_call_payoff_ATM(self):
 		# short call -\
-		strike_price=50
-		premeium=1.24
 		position=-1
-		x = 50
-		payoff = pf.call_payoff(strike_price, premeium, position, x)
-		self.assertTrue(payoff == premeium)
+		payoff = pf.call_payoff(self.strike_price, self.premeium, position, self.quantity, self.x)
+		self.assertTrue(payoff == self.premeium)
 
 	def test_short_call_payoff_ITM(self):
 		# short call -\
-		strike_price=50
-		premeium=1.24
 		position=-1
 		for x in range(45, 0, -5):
-			payoff = pf.call_payoff(strike_price, premeium, position, x)
-			self.assertTrue(payoff == premeium)
+			payoff = pf.call_payoff(self.strike_price, self.premeium, position, self.quantity, x)
+			self.assertTrue(payoff == self.premeium)
 
 	def test_long_put_payoff_OTM(self):
 		#long put \__
-		strike_price=50
-		premeium=1.24
 		position=1
-		for x in range(55, 2*strike_price, 5):
-			payoff = pf.put_payoff(strike_price, premeium, position, x)
-			self.assertTrue(payoff == -premeium)
+		for x in range(55, 2*self.strike_price, 5):
+			payoff = pf.put_payoff(self.strike_price, self.premeium, position, self.quantity, x)
+			self.assertTrue(payoff == -self.premeium)
 		
 	def test_long_put_payoff_ATM(self):
 		#long put \__
-		strike_price=50
-		premeium=1.24
 		position=1
-		x=50
-		payoff = pf.put_payoff(strike_price, premeium, position, x)
-		self.assertTrue(payoff == -premeium)
+		payoff = pf.put_payoff(self.strike_price, self.premeium, position, self.quantity, self.x)
+		self.assertTrue(payoff == -self.premeium)
 
 	def test_long_put_payoff_ITM(self):
 		#long put \__
-		strike_price=50
-		premeium=1.24
 		position=1
 		for x in range(45, 0, -5):
-			payoff = pf.put_payoff(strike_price, premeium, position, x)
-			self.assertTrue(payoff == (strike_price-x-premeium))
+			payoff = pf.put_payoff(self.strike_price, self.premeium, position, self.quantity, x)
+			self.assertTrue(payoff == (self.strike_price-x-self.premeium))
 		
 	def test_short_put_payoff_OTM(self):
 		#short put /--
-		strike_price=50
-		premeium=1.24
 		position=-1
 		for x in range(45, 0, -5):
-			payoff = pf.put_payoff(strike_price, premeium, position, x)
-			self.assertTrue(payoff == -(strike_price-x-premeium))
+			payoff = pf.put_payoff(self.strike_price, self.premeium, position, self.quantity, x)
+			self.assertTrue(payoff == -(self.strike_price-x-self.premeium))
 
 	def test_short_put_payoff_ATM(self):
 		#short put /--
-		strike_price=50
-		premeium=1.24
 		position=-1
-		x=50
-		payoff = pf.put_payoff(strike_price, premeium, position, x)
-		self.assertTrue(payoff == -(strike_price-x-premeium))
+		payoff = pf.put_payoff(self.strike_price, self.premeium, position, self.quantity, self.x)
+		self.assertTrue(payoff == -(self.strike_price-self.x-self.premeium))
 
 	def test_short_put_payoff_ITM(self):
 		#short put /--
-		strike_price=50
-		premeium=1.24
 		position=-1
-		for x in range(55, 2*strike_price, 5):
-			payoff = pf.put_payoff(strike_price, premeium, position, x)
-			self.assertTrue(payoff == premeium)
+		for x in range(55, 2*self.strike_price, 5):
+			payoff = pf.put_payoff(self.strike_price, self.premeium, position, self.quantity, x)
+			self.assertTrue(payoff == self.premeium)
 
 
 if __name__ =='__main__':
