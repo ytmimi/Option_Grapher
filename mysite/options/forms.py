@@ -9,8 +9,12 @@ class Option_Form(forms.ModelForm):
 	position = forms.ChoiceField(choices=(('Long', 'Long'), ('Short', 'Short')))
 	#http://www.multpl.com/1-year-treasury-rate/ 
 	#Current 1 Year Treasury Rate: 2.35% At market close Wed Jun 13, 2018
-	interest_rate = forms.DecimalField(decimal_places=4,initial=.0235,
-		help_text="1 Year Treasury Rate at market close on 6/13/18")
+	interest_rate = forms.FloatField(initial=.0235, min_value=0, max_value=1,
+		help_text="1 Year Treasury Rate at market close on 6/13/18",
+		error_messages={
+			'max_value': 'Must be less than or equal to 1.',
+			'min_value': 'Must be greater than or equal to 0.',
+		},)
 	days_till_exp = forms.DateField(label='Expiration Date',
 		input_formats=[
 			'%m/%d/%Y', '%m/%d/%y', '%m-%d-%Y', '%m-%d-%y',
