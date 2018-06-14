@@ -15,6 +15,9 @@ TEAL BLUE: #396787
 	text-align: center;
 }
 
+form p {
+	text-align: left;
+}
 
 .chart-container{
 	margin-top: 50px;
@@ -74,6 +77,11 @@ td{
 	border-right:2px solid white;
 	border-left: 2px solid white;
 	border-bottom: 2px solid #0E466D;
+}
+
+.helptext{
+	font-size: .7em;
+	display:block;
 }
 
 
