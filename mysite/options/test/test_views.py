@@ -3,7 +3,7 @@ import sys
 #adds the app directory to the path
 app_path = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.append(app_path)
-from django.test import SimpleTestCase, Client
+from django.test import TestCase, Client
 from django.urls import reverse
 import datetime as dt
 import random
@@ -11,11 +11,12 @@ import views
 import forms
 
 
-class Test_Option_Input_View(SimpleTestCase):
+class Test_Option_Input_View(TestCase):
 	
 	def setUp(self):
 		self.client = Client()
 		self.valid_input = {
+		'quantity':1,
 		'position':random.choice(['Long', 'Short']),
 		'option_type':random.choice(['Call', 'Put']),
 		'strike_price':50,
