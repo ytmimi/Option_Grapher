@@ -1,9 +1,5 @@
 const CHART = document.getElementById('option_chart')
 
-var something = "dhasdfahasdfhasdfhasdfh "
-console.log(something)
-console.log(payoff)
-
 var chart = new Chart(CHART, {
     // The type of chart we want to create
     type: 'line',
