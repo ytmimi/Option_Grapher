@@ -1,22 +1,28 @@
 from django import forms
 import datetime as dt
+from django.core.validators import MinValueValidator
+
+from options import models
 
 
-class Option_Form(forms.Form):
+class Option_Form(forms.ModelForm):
 	position = forms.ChoiceField(choices=(('Long', 'Long'), ('Short', 'Short')))
-	option_type = forms.ChoiceField(choices=(('Call', 'Call'), ('Put', 'Put')))
-	strike_price = forms.DecimalField(decimal_places=2,)
-	stock_price = forms.DecimalField(decimal_places=2, )
-	traded_price = forms.DecimalField(decimal_places=2,)
-	interest_rate = forms.DecimalField(decimal_places=4,)
-	exp_date = forms.DateField(label='Expiration Date',
+	#http://www.multpl.com/1-year-treasury-rate/ 
+	#Current 1 Year Treasury Rate: 2.35% At market close Wed Jun 13, 2018
+	interest_rate = forms.DecimalField(decimal_places=4,initial=.0235,
+		help_text="1 Year Treasury Rate at market close on 6/13/18")
+	days_till_exp = forms.DateField(label='Expiration Date',
 		input_formats=[
 			'%m/%d/%Y', '%m/%d/%y', '%m-%d-%Y', '%m-%d-%y',
 			'%-m/%d/%Y', '%-m/%d/%y', '%-m-%d-%Y', '%-m-%d-%y',
 			'%m/%-d/%Y', '%m/%-d/%y', '%m-%-d-%Y', '%m-%-d-%y',
-			'%-m/%-d/%Y', '%-m/%-d/%y', '%-m-%-d-%Y', '%-m-%-d-%y'
-		],
+			'%-m/%-d/%Y', '%-m/%-d/%y', '%-m-%-d-%Y', '%-m-%-d-%y'],
 		error_messages={'invalid': 'Use date format: Month/Day/Year or Month-Day-Year'})
+
+	class Meta:
+		model = models.Option_Model
+		fields = ('position', 'option_type', 'quantity', 'strike_price', 'stock_price',
+			'traded_price', 'interest_rate', 'days_till_exp')
 
 	def clean_position(self):
 		if str(self.cleaned_data['position']) == 'Long':
@@ -24,39 +30,8 @@ class Option_Form(forms.Form):
 		else:
 			return -1
 
-	def clean_option_type(self):
-		return str(self.cleaned_data['option_type'])
-
-	def clean_strike_price(self):
-		data = float(self.cleaned_data['strike_price'])
-		if data >= 0:
-			return data
-		else:
-			raise forms.ValidationError('Strike price must be positive')
-
-	def clean_stock_price(self):
-		data = float(self.cleaned_data['stock_price'])
-		if data >= 0:
-			return data
-		else:
-			raise forms.ValidationError('Stock price must be positive')
-
-	def clean_traded_price(self):
-		data = float(self.cleaned_data['traded_price'])
-		if data >= 0:
-			return data
-		else:
-			raise forms.ValidationError('Option price must be positive')
-
-	def clean_interest_rate(self):
-		data = float(self.cleaned_data['interest_rate'])
-		if data >= 0:
-			return data
-		else:
-			raise forms.ValidationError('Interest rate must be positive')
-
-	def clean_exp_date(self):
-		expiration = self.cleaned_data['exp_date']
+	def clean_days_till_exp(self):
+		expiration = self.cleaned_data['days_till_exp']
 		now = dt.date.today()
 		diff = (expiration - now).days
 		if diff >=0:
