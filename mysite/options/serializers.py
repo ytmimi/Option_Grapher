@@ -13,7 +13,7 @@ def option_chart_data():
 			'price':option.traded_price,}
 			)
 		x_values.append(option.strike_price)
-		x_values.append(option.strike_price*2)
+		x_values.append(option.strike_price*2)	
 
 	x_list = sorted(set(x_values))
 	payoff = {}
