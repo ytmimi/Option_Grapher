@@ -2,6 +2,7 @@ const CHART = document.getElementById('option_chart')
 
 var something = "dhasdfahasdfhasdfhasdfh "
 console.log(something)
+console.log(payoff)
 
 var chart = new Chart(CHART, {
     // The type of chart we want to create
@@ -34,7 +35,7 @@ function get_options(){
 		defaultFontSize: 20,
 		title: {
             display: true,
-            text: "Payoff Chart",
+            text: "Position Payoff Chart",
             fontSize: 20,
             fontFamily:"Roboto Condensed",
             fontColor:"#262C2C",
@@ -47,22 +48,38 @@ function get_options(){
 
 		},
 		scales: {
+            xAxes: [{
+                display: true,
+                type:'linear',
+                gridLines: {
+                    display: false,
+                    
+                },
+                position: 'bottom',
+                scaleLabel: {
+                            display: true,
+                            labelString: 'Stock Price'
+                },
+                ticks: {
+                    // can also use min
+                    suggestedMin: 0,
+                },
+            }],
 	        yAxes: [{
+                scaleLabel: {
+                            display: true,
+                            labelString: 'Payoff ($)'
+                },
 	            ticks: {
 	                // suggestedMax: maxYAxis,
 	                // suggestedMin: maxYAxis*-1,
 	                // stepSize: size,
 	            }
         	}],
-        	xAxes: [{
-      			gridLines: {
-         			display: false
-      			},
-      			display:true,
-      		}]	
+
     	},
     	legend: {
-            display: false
+            display: false,
         },
 	}
 }
