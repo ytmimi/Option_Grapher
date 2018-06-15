@@ -5,6 +5,7 @@ from wallstreet.blackandscholes import BlackandScholes as BS
 from options import forms
 from options import models
 from options.serializers import option_chart_data
+from options.scrape_data import Yahoo_Option_Scraper
 
 # Create your views here.
 
@@ -41,6 +42,32 @@ def option_input(request):
 			'payoff': option_chart_data(),}
 	return render(request, 'options/options_forms.html', data)
 
+
+
+def stock_option_search(request):
+	if request.method == 'POST':
+		form = forms.Search_Form(request.POST)
+		if form.is_valid():
+			ticker = form.cleaned_data['search']
+			# import pdb; pdb.set_trace()
+			try:
+				date = request.POST['dates']
+				scraper = Yahoo_Option_Scraper(ticker, date)
+			except KeyError:
+				scraper = Yahoo_Option_Scraper(ticker)
+			
+			data = {'form': form,
+				'ticker':ticker,
+				'name': scraper.get_company_name(),
+				'stock_price': scraper.get_stock_price(),
+				'exp_dates':scraper.exp_dates,
+				'calls': scraper.get_option_table(),
+				'puts':	scraper.get_option_table(call=False),				
+			}
+			return render(request, 'options/options_scrape_form.html', data)
+
+	data = {'form':forms.Search_Form()}
+	return render(request, 'options/options_scrape_form.html', data)
 
 	
 

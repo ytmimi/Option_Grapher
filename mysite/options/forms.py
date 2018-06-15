@@ -5,6 +5,11 @@ from django.core.validators import MinValueValidator
 from options import models
 
 
+class Search_Form(forms.Form):
+	search = forms.CharField(label='', 
+		widget=forms.TextInput(attrs={'placeholder':'Enter Stock Ticker', 'type':'search'}))
+
+
 class Option_Form(forms.ModelForm):
 	position = forms.ChoiceField(choices=(('Long', 'Long'), ('Short', 'Short')))
 	#http://www.multpl.com/1-year-treasury-rate/ 
@@ -42,6 +47,7 @@ class Option_Form(forms.ModelForm):
 			return diff
 		else:
 			raise forms.ValidationError('Sorry, expired options can\'t be analysed.')
+
 
 
 
