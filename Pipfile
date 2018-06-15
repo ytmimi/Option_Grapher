@@ -9,6 +9,7 @@ scipy = "*"
 django = "*"
 datetime = "*"
 djangorestframework = "*"
+requests-html = "*"
 
 [dev-packages]
 
