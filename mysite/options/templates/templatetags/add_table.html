@@ -1,0 +1,16 @@
+<table>
+	<thead>
+		{% for head in header %}
+			<th>{{head}}</th>
+		{% endfor %}
+	</thead>
+	<tbody>
+		{% for row in rows %}
+		<tr>
+			{% for col in row %}
+			<td>{{col}}</td>
+			{% endfor %}
+		</tr>
+		{% endfor %}
+	</tbody>
+</table>

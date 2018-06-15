@@ -17,4 +17,20 @@ def multiply(a, b):
 	return a*b
 
 
+@register.inclusion_tag('templatetags/add_table.html')
+def table_from_dict(some_dict):
+	key = list(some_dict.keys())[0]
+	num_of_rows = len(some_dict[key])
+
+	row = []
+	for i in range(num_of_rows):
+		col = []
+		for key in some_dict.keys():
+			col.append(some_dict[key][i])
+		row.append(col)
+
+	return {
+		'header': [x for x in some_dict.keys()],
+		'rows': row,
+	}
 
