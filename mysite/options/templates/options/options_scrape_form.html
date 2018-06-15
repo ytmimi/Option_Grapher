@@ -1,0 +1,47 @@
+{% extends 'options/options_base.html' %}
+<!-- load the custom filter -->
+{% load options_filters %}
+{% load staticfiles %}
+
+{% block content %}
+<div class="col-md-8">
+{% if name %}
+	<h1>{{name}}</h1> 
+	<h4>Last traded at: ${{stock_price}}</h4>
+{% else %}
+	<h1>Search stock tickers for a list of options</h1>
+{% endif %}
+</div>
+
+<div class="col-md-4">
+<form class="search-bar" method="POST">
+	{% csrf_token %}
+	{{form}}
+	{% if exp_dates %}
+	<select name="dates">
+		{% for key in exp_dates %}
+		<option value="{{exp_dates|dict_key:key}}">{{key}}</option>
+		{% endfor %}
+	</select>
+	{% endif %}
+	<input class="btn btn-dark" type="submit" value="Search Stock">
+	
+</form>
+</div>
+
+<div class="row">
+	<div class="col col-12">
+		{% if calls %}
+			<h1>Calls</h1>
+			{% table_from_dict calls %}
+		{% endif %}
+	</div>
+	<div class="col col-12">
+		{% if puts %}
+			<h1>Puts</h1>
+			{% table_from_dict puts %}
+		{% endif %}
+	</div>
+</div>
+
+{% endblock %}
