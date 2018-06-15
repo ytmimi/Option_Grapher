@@ -22,8 +22,15 @@
 				<a class="nav-link" href="{% url 'index' %}">Home</a>
 			</li>
 			<li class="nav-item">
-				<a class="nav-link"href="{% url 'options:form'%}">Options</a>
+				<a class="nav-link" href="#">Projects</a>
 			</li>
+			<li class="nav-item">
+				<a class="nav-link"href="{% url 'options:form'%}">Graph Positions</a>
+			</li>
+			<li class="nav-item">
+				<a class="nav-link"href="{% url 'options:search'%}">Option Search</a>
+			</li>
+			{% block extra_nav_block %}{% endblock %}
 		</ul>
 	</nav>
 	<div class="container">
