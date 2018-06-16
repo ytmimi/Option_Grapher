@@ -18,12 +18,7 @@ def call_payoff(strike_price, premium, position, quantity, x):
 	position- either 1 or -1 depending on if long or short respectively
 	x- a float or int representing a given stock price
 	'''
-	if x < strike_price:
-		payoff = -premium
-	else:
-		payoff = x - strike_price - premium
-
-	return payoff*position*quantity
+	return (max(x-strike_price, 0)-premium) * position * quantity
 
 def put_payoff(strike_price, premium, position, quantity, x):
 	'''
@@ -32,11 +27,7 @@ def put_payoff(strike_price, premium, position, quantity, x):
 	position- either 1 or -1 depending on if long or short respectively
 	x- a float or int representing a given stock price
 	'''
-	if x > strike_price:
-		payoff = -premium
-	else:
-		payoff = strike_price - x - premium
-	return payoff*position*quantity
+	return (max(strike_price - x, 0) - premium) * position * quantity
 
 
 				
