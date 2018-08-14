@@ -1,18 +1,17 @@
-from django import forms
 import datetime as dt
-from django.core.validators import MinValueValidator
-
-from options import models
+from django import forms
+from django.forms import ValidationError
+from options.models import Option_Model
 
 
 class Search_Form(forms.Form):
-	search = forms.CharField(label='', 
+	search = forms.CharField(label='',
 		widget=forms.TextInput(attrs={'placeholder':'Enter Stock Ticker', 'type':'search'}))
 
 
 class Option_Form(forms.ModelForm):
 	position = forms.ChoiceField(choices=(('Long', 'Long'), ('Short', 'Short')))
-	#http://www.multpl.com/1-year-treasury-rate/ 
+	#http://www.multpl.com/1-year-treasury-rate/
 	#Current 1 Year Treasury Rate: 2.35% At market close Wed Jun 13, 2018
 	interest_rate = forms.FloatField(initial=.0235, min_value=0, max_value=1,
 		help_text="1 Year Treasury Rate at market close on 6/13/18",
@@ -29,15 +28,14 @@ class Option_Form(forms.ModelForm):
 		error_messages={'invalid': 'Use date format: Month/Day/Year or Month-Day-Year'})
 
 	class Meta:
-		model = models.Option_Model
-		fields = ('position', 'option_type', 'quantity', 'strike_price', 'stock_price',
-			'traded_price', 'interest_rate', 'days_till_exp')
+		model = Option_Model
+		fields = ('position', 'option_type', 'quantity', 'strike_price',
+				'stock_price','traded_price', 'interest_rate', 'days_till_exp')
 
 	def clean_position(self):
-		if str(self.cleaned_data['position']) == 'Long':
+		if self.cleaned_data['position'] == 'Long':
 			return 1
-		else:
-			return -1
+		return -1
 
 	def clean_days_till_exp(self):
 		expiration = self.cleaned_data['days_till_exp']
@@ -45,9 +43,4 @@ class Option_Form(forms.ModelForm):
 		diff = (expiration - now).days
 		if diff >=0:
 			return diff
-		else:
-			raise forms.ValidationError('Sorry, expired options can\'t be analysed.')
-
-
-
-
+		raise ValidationError('Sorry, expired options can\'t be analysed.')
