@@ -1,11 +1,11 @@
 import json
-from options import models
+from options.models import Option_Model
 from options import payoff_functions as pf
 
 def option_chart_data():
 	option_list = []
 	x_values = [0,]
-	for option in models.Option_Model.objects.all():
+	for option in Option_Model.objects.all():
 		option_list.append(
 			{'type':option.option_type,
 			'pos':option.position,
@@ -24,6 +24,6 @@ def option_chart_data():
 		for x in x_list:
 			payoff[x] = payoff[x] + pf.option_payoff(option['type'], option['pos'],
 							option['strike'], option['price'], option['quantity'], x)
-							
+
 	data = [{'x':x, 'y':y} for x, y in payoff.items()]
 	return json.dumps(data)
