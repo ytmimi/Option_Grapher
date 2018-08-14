@@ -14,24 +14,20 @@ def same_option(option):
 
 # Create your models here.
 class Option_Model(models.Model):
-	quantity = models.IntegerField(default=1, 
-		validators=[MinValueValidator(1, 'Must be greater than or equal to 1')],
-		)
+	stock_ticker = models.CharField(max_length=20, default='Generic Option')
+	quantity = models.IntegerField(default=1,
+		validators=[MinValueValidator(1, 'Must be greater than or equal to 1')],)
 	position = models.IntegerField()
 	option_type = models.CharField(max_length=10, default='Call',
-		choices=(('Call', 'Call'), ('Put', 'Put')),)
+					choices=(('Call', 'Call'), ('Put', 'Put')),)
 	strike_price = models.FloatField(
-		validators=[MinValueValidator(0, 'Must be greater than or equal to 0.')],
-		)
+		validators=[MinValueValidator(0, 'Must be greater than or equal to 0.')],)
 	stock_price = models.FloatField(
-		validators=[MinValueValidator(0, 'Must be greater than or equal to 0.')],
-		)
+		validators=[MinValueValidator(0, 'Must be greater than or equal to 0.')],)
 	traded_price = models.FloatField(
-		validators=[MinValueValidator(0, 'Must be greater than or equal to 0.')],
-		)
+		validators=[MinValueValidator(0, 'Must be greater than or equal to 0.')],)
 	interest_rate = models.FloatField(
-		validators=[MinValueValidator(0, 'Must be greater than or equal to 0.')],
-		)
+		validators=[MinValueValidator(0, 'Must be greater than or equal to 0.')],)
 	days_till_exp = models.FloatField()
 	iv = models.FloatField(null=True, blank=True)
 	delta = models.FloatField(null=True, blank=True)
@@ -48,7 +44,7 @@ class Option_Model(models.Model):
 		return f'{self.strike_price} {position} {self.option_type}'
 
 	def save(self, *args, **kwargs):
-		option = BS(self.stock_price, self.strike_price, self.days_till_exp, 
+		option = BS(self.stock_price, self.strike_price, self.days_till_exp,
 				self.traded_price, self.interest_rate, str(self.option_type))
 		self.iv = round(option.impvol, 5)
 		self.delta = round(option.delta(), 5)*self.position*self.quantity
