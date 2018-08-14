@@ -1,33 +1,29 @@
-def option_payoff(option_type, position, strike_price, premium, quantity, x):
-	''' for a given stock price x, the payoff for a call or put is calculated
-		Note: position should be 1 or -1 denoting Long or Short
+def option_payoff(option_type, position, strike_price,
+					premium, quantity, stock_price):
+	''' for a given stock price, the payoff for a call or put is calculated
+		position - either 1 or -1 denoting long or short respectively
 	'''
 	if option_type == 'Call':
-		payoff = call_payoff(strike_price, premium, position, quantity, x)
+		return call_payoff(strike_price, premium, position, quantity, x)
+	elif option_type == 'Put':
+		return put_payoff(strike_price, premium, position, quantity, x)
 	else:
-		payoff = put_payoff(strike_price, premium, position, quantity, x)
-	return payoff
+		raise ValueError('option_type must be either Call or Put')
 
-def call_payoff(strike_price, premium, position, quantity, x):
-	''' 
-	strike_price- float representing the excersie price of the option
-	premium- float representing the price paid for the option
-	position- either 1 or -1 denoting long or short respectively
-	x- a float or int representing a given stock price
+def call_payoff(strike_price: float, premium: float, position: int,
+								quantity: int, stock_price: float):
 	'''
-	return (max(x-strike_price, 0)-premium) * position * quantity
-
-def put_payoff(strike_price, premium, position, quantity, x):
+	quantity - should be >= 1
+	position - either 1 or -1 denoting long or short respectively
+	return call payoff
 	'''
-	strike_price- float representing the excersie price of the option
-	premium- float representing the price paid for the option
-	position- either 1 or -1 denoting long or short respectively
-	x- a float or int representing a given stock price
+	return (max(stock_price-strike_price, 0)-premium) * position * quantity
+
+def put_payoff(strike_price: float, premium: float, position: int,
+								quantity: int, stock_price: float):
 	'''
-	return (max(strike_price - x, 0) - premium) * position * quantity
-
-
-				
-			
-			
-
+	quantity - should be >= 1
+	position - either 1 or -1 denoting long or short respectively
+	return put payoff
+	'''
+	return (max(strike_price - stock_price, 0) - premium) * position * quantity

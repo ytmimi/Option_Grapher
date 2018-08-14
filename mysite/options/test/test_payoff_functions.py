@@ -9,13 +9,12 @@ import payoff_functions as pf
 
 
 class Test_Payoff_Functions(unittest.TestCase):
-	@classmethod 
+	@classmethod
 	def setUpClass(cls):
-		cls.strike_price = 50 
+		cls.strike_price = 50
 		cls.premeium = 1.24
 		cls.quantity = 1
 		cls.x = 50
-
 
 	def test_long_call_payoff_OTM(self):
 		# long call _/
@@ -62,7 +61,7 @@ class Test_Payoff_Functions(unittest.TestCase):
 		for x in range(55, 2*self.strike_price, 5):
 			payoff = pf.put_payoff(self.strike_price, self.premeium, position, self.quantity, x)
 			self.assertTrue(payoff == -self.premeium)
-		
+
 	def test_long_put_payoff_ATM(self):
 		#long put \__
 		position=1
@@ -75,7 +74,7 @@ class Test_Payoff_Functions(unittest.TestCase):
 		for x in range(45, 0, -5):
 			payoff = pf.put_payoff(self.strike_price, self.premeium, position, self.quantity, x)
 			self.assertTrue(payoff == (self.strike_price-x-self.premeium))
-		
+
 	def test_short_put_payoff_OTM(self):
 		#short put /--
 		position=-1
@@ -96,18 +95,12 @@ class Test_Payoff_Functions(unittest.TestCase):
 			payoff = pf.put_payoff(self.strike_price, self.premeium, position, self.quantity, x)
 			self.assertTrue(payoff == self.premeium)
 
+	def test_option_payoff_error(self):
+		err_msg = 'option_type must be either Call or Put'
+		with self.assertRaises(ValueError) as err:
+			pf.option_payoff('None', 1, 50, 3.20, 1, 50)
+		self.assertEqual(str(err.exception), err_msg)
+
 
 if __name__ =='__main__':
 	unittest.main()
-
-
-
-
-
-
-
-
-
-
-
-
