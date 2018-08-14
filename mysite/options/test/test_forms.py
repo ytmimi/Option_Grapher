@@ -5,7 +5,7 @@ import sys
 app_path = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.append(app_path)
 
-import forms
+from options import forms
 import datetime as dt
 from django.test import SimpleTestCase, TestCase, Client
 from django.forms import ValidationError
@@ -48,19 +48,19 @@ class Test_Option_Form(SimpleTestCase):
 			'Must be greater than or equal to 1')
 
 	def test_negative_strike_input(self):
-		self.assertEqual(self.invalid_form.errors['strike_price'][0], 
+		self.assertEqual(self.invalid_form.errors['strike_price'][0],
 						'Must be greater than or equal to 0.')
 
 	def test_negative_stock_input(self):
-		self.assertEqual(self.invalid_form.errors['stock_price'][0], 
+		self.assertEqual(self.invalid_form.errors['stock_price'][0],
 						'Must be greater than or equal to 0.')
 
 	def test_negative_price_input(self):
-		self.assertEqual(self.invalid_form.errors['traded_price'][0], 
+		self.assertEqual(self.invalid_form.errors['traded_price'][0],
 						'Must be greater than or equal to 0.')
 
 	def test_negative_rate_input(self):
-		self.assertEqual(self.invalid_form.errors['interest_rate'][0], 
+		self.assertEqual(self.invalid_form.errors['interest_rate'][0],
 						'Must be greater than or equal to 0.')
 
 	def test_valid_date_format(self):
@@ -94,77 +94,29 @@ class Test_Option_Form(SimpleTestCase):
 
 	def test_clean_option_type(self):
 		self.valid_form.is_valid()
-		self.assertEqual(self.valid_form.cleaned_data['option_type'], 
+		self.assertEqual(self.valid_form.cleaned_data['option_type'],
 						self.valid_input['option_type'])
 
 	def test_clean_strike(self):
 		self.valid_form.is_valid()
-		self.assertEqual(self.valid_form.cleaned_data['strike_price'], 
+		self.assertEqual(self.valid_form.cleaned_data['strike_price'],
 						self.valid_input['strike_price'])
 
 	def test_clean_stock(self):
 		self.valid_form.is_valid()
-		self.assertEqual(self.valid_form.cleaned_data['stock_price'], 
+		self.assertEqual(self.valid_form.cleaned_data['stock_price'],
 						self.valid_input['stock_price'])
 
 	def test_clean_price(self):
 		self.valid_form.is_valid()
-		self.assertEqual(self.valid_form.cleaned_data['traded_price'], 
+		self.assertEqual(self.valid_form.cleaned_data['traded_price'],
 						self.valid_input['traded_price'])
 
 	def test_clean_interest_rate(self):
 		self.valid_form.is_valid()
-		self.assertEqual(self.valid_form.cleaned_data['interest_rate'], 
+		self.assertEqual(self.valid_form.cleaned_data['interest_rate'],
 						self.valid_input['interest_rate'])
 
 	def test_clean_exp_date(self):
 		self.valid_form.is_valid()
 		self.assertIsInstance(self.valid_form.cleaned_data['days_till_exp'], int)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
