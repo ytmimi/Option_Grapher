@@ -3,6 +3,8 @@ from django import forms
 from django.forms import ValidationError
 from options.models import Option_Model
 
+RF_URL = 'https://www.treasury.gov/resource-center/data-chart-center/interest-rates/Pages/TextView.aspx?data=yield'
+
 
 class Search_Form(forms.Form):
 	search = forms.CharField(label='',
@@ -11,10 +13,10 @@ class Search_Form(forms.Form):
 
 class Option_Form(forms.ModelForm):
 	position = forms.ChoiceField(choices=(('Long', 'Long'), ('Short', 'Short')))
-	#http://www.multpl.com/1-year-treasury-rate/
+
 	#Current 1 Year Treasury Rate: 2.35% At market close Wed Jun 13, 2018
 	interest_rate = forms.FloatField(initial=.0235, min_value=0, max_value=1,
-		help_text="1 Year Treasury Rate at market close on 6/13/18",
+		help_text= f'Reference for <a href="{RF_URL}">Treasury Rates</a>',
 		error_messages={
 			'max_value': 'Must be less than or equal to 1.',
 			'min_value': 'Must be greater than or equal to 0.',
