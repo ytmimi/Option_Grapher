@@ -6,7 +6,7 @@ class Yahoo_Option_Scraper():
 		self.ticker = ticker.upper()
 		#base is the main url that won't be manipulated
 		self.base = f'https://finance.yahoo.com/quote/{self.ticker}/options?p={self.ticker}'
-		#url may be manipulated depending on values passed to the class constructor 
+		#url may be manipulated depending on values passed to the class constructor
 		self.url = f'https://finance.yahoo.com/quote/{self.ticker}/options?p={self.ticker}'
 		if date != None:
 			self.url += f"&date={date}"
@@ -18,7 +18,7 @@ class Yahoo_Option_Scraper():
 			self.has_options = False
 
 	def get_response(self, url):
-		return HTMLSession().get(url)
+		return session.get(url)
 
 	def get_company_name(self):
 		try:
@@ -46,10 +46,8 @@ class Yahoo_Option_Scraper():
 		#<table class="calls table-bordered W(100%) Pos(r) Bd(0) Pt(0) list-options" data-reactid="42">
 		#<table class="puts table-bordered W(100%) Pos(r) list-options" data-reactid="343">
 		if self.has_options:
-			if call:
-				opt_class = 'calls'
-			else:
-				opt_class = 'puts'
+			if call: opt_class = 'calls'
+			else: opt_class = 'puts'
 			try:
 				table = self.response.html.find(f'table.{opt_class}.table-bordered')[0]
 			except IndexError:
@@ -65,20 +63,7 @@ class Yahoo_Option_Scraper():
 			table_body = table.find('tbody')[0]
 			for row in table_body.find('tr'):
 				for i, col in enumerate(row.find('td')):
-					data[list(data.keys())[i]].append(col.text) 
+					data[list(data.keys())[i]].append(col.text)
 			return data
 		else:
 			return None
-
-
-
-if __name__ == '__main__':
-	stock_data = Yahoo_Option_Scraper('jwn')
-	# print(stock_data.get_option_table())
-	# data = stock_data.get_option_table(call=False)
-	# print(stock_data.get_exp_dates())
-	print(stock_data.get_company_name())
-	
-
-
-
