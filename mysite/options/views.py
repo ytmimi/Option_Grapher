@@ -1,6 +1,7 @@
 from django.shortcuts import render
 from django.urls import reverse
 from options.forms import Search_Form, Option_Form
+from django.http import HttpResponseRedirect
 from options.models import Option_Model
 from options.serializers import option_chart_data
 from options.scrape_data import Yahoo_Option_Scraper
@@ -8,7 +9,7 @@ from options.scrape_data import Yahoo_Option_Scraper
 
 
 def delete_option(request, pk):
-	option = models.Option_Model.objects.filter(pk=pk)
+	option = Option_Model.objects.filter(pk=pk)
 	option.delete()
 	return HttpResponseRedirect(reverse('options:form'))
 
