@@ -1,17 +1,16 @@
 from django.shortcuts import render
 from django.urls import reverse
-from django.http import HttpResponseRedirect
 from options.forms import Search_Form, Option_Form
 from options.models import Option_Model
 from options.serializers import option_chart_data
 from options.scrape_data import Yahoo_Option_Scraper
 
 
+
 def delete_option(request, pk):
 	option = models.Option_Model.objects.filter(pk=pk)
 	option.delete()
 	return HttpResponseRedirect(reverse('options:form'))
-
 
 def option_input(request):
 	form = Option_Form()
@@ -36,7 +35,6 @@ def option_input(request):
 			'model': Option_Model.objects.all(),
 			'payoff': option_chart_data(),}
 	return render(request, 'options/options_forms.html', data)
-
 
 def stock_option_search(request):
 	if request.method == 'POST':
