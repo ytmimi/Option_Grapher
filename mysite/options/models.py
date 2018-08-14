@@ -1,6 +1,7 @@
 from django.db import models
 from wallstreet.blackandscholes import BlackandScholes as BS
 from django.core.validators import MinValueValidator
+from options import payoff_functions as pf
 
 GREATER_THAN_0 = MinValueValidator(0, 'Must be greater than or equal to 0.')
 GREATER_THAN_1 = MinValueValidator(1, 'Must be greater than or equal to 1')
@@ -25,10 +26,8 @@ class Option_Model(models.Model):
 
 	def __str__(self):
 		if self.position == 1:
-			position = 'Long'
-		else:
-			position = 'Short'
-		return f'{self.strike_price} {position} {self.option_type}'
+			return f'{self.strike_price} Long {self.option_type}'
+		return f'{self.strike_price} Short {self.option_type}'
 
 	@classmethod
 	def already_exists(cls, option):
@@ -44,9 +43,14 @@ class Option_Model(models.Model):
 		option = BS(self.stock_price, self.strike_price, self.days_till_exp,
 				self.traded_price, self.interest_rate, str(self.option_type))
 		self.iv = round(option.impvol, 5)
-		self.delta = round(option.delta(), 5)*self.position*self.quantity
-		self.gamma = round(option.gamma(), 5)*self.position*self.quantity
-		self.vega = round(option.vega(), 5)*self.position*self.quantity
-		self.theta = round(option.theta(), 5)*self.position*self.quantity
-		self.rho = round(option.rho(), 5)*self.position*self.quantity
+		self.delta = round(option.delta(), 5) * self.position * self.quantity
+		self.gamma = round(option.gamma(), 5) * self.position * self.quantity
+		self.vega = round(option.vega(), 5) * self.position * self.quantity
+		self.theta = round(option.theta(), 5) * self.position * self.quantity
+		self.rho = round(option.rho(), 5) * self.position * self.quantity
 		super().save(*args, **kwargs)
+
+	def option_payoff(self, stock_price):
+		'''returns the option payoff given a hypothetical stock price'''
+		return pf.option_payoff(self.option_type, self.position, self.strike_price,
+								self.traded_price, self.quantity, stock_price)
