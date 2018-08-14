@@ -16,7 +16,7 @@ class Option_Model(models.Model):
 	stock_price = models.FloatField(validators=[GREATER_THAN_0, ],)
 	traded_price = models.FloatField(validators=[GREATER_THAN_0, ],)
 	interest_rate = models.FloatField(validators=[GREATER_THAN_0, ],)
-	days_till_exp = models.FloatField()
+	days_till_exp = models.FloatField()	
 	iv = models.FloatField(null=True, blank=True)
 	delta = models.FloatField(null=True, blank=True)
 	gamma = models.FloatField(null=True, blank=True)
@@ -40,7 +40,8 @@ class Option_Model(models.Model):
 			).filter(days_till_exp=option.days_till_exp)
 
 	def save(self, *args, **kwargs):
-		option = BS(self.stock_price, self.strike_price, self.days_till_exp,
+		days_per_year = self.days_till_exp/ 365
+		option = BS(self.stock_price, self.strike_price, days_per_year,
 				self.traded_price, self.interest_rate, str(self.option_type))
 		self.iv = round(option.impvol, 5)
 		self.delta = round(option.delta(), 5) * self.position * self.quantity

@@ -15,7 +15,7 @@
 	</div>
 
 	<!-- Chart -->
-	<div class="col-lg-8 col-md-6 chart-container">		
+	<div class="col-lg-8 col-md-6 chart-container">
 		<canvas id="option_chart"></canvas>
 	</div>
 
@@ -29,7 +29,7 @@
 		var payoff = [{x:0, y:0},]
 	</script>
 	{% endif %}
-	
+
 	<!-- Table full of Greek information -->
 	{% if model %}
 	<div class="col-md-12">
@@ -65,7 +65,7 @@
 					<td>{{option.stock_price}}</td>
 					<td>{{option.traded_price}}</td>
 					<td>{{option.interest_rate}}</td>
-					<td>{{option.days_till_exp|multiply:365}}</td>
+					<td>{{option.days_till_exp}}</td>
 					<td>{{option.iv}}</td>
 					<td>{{option.delta}}</td>
 					<td>{{option.gamma}}</td>
@@ -82,8 +82,8 @@
 	</div>
 	{% endif %}
 
-	
-	
-	
+
+
+
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.4.0/Chart.min.js"></script>
 {% endblock %}

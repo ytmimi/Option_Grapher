@@ -22,7 +22,7 @@ def option_input(request):
 			position = form.cleaned_data['position']
 			s = form.cleaned_data['stock_price']
 			k = form.cleaned_data['strike_price']
-			t = form.cleaned_data['days_till_exp'] / 365
+			t = form.cleaned_data['days_till_exp']
 			p = form.cleaned_data['traded_price']
 			r = form.cleaned_data['interest_rate']
 			type_ = form.cleaned_data['option_type']
