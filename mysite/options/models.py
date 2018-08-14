@@ -2,32 +2,20 @@ from django.db import models
 from wallstreet.blackandscholes import BlackandScholes as BS
 from django.core.validators import MinValueValidator
 
+GREATER_THAN_0 = MinValueValidator(0, 'Must be greater than or equal to 0.')
+GREATER_THAN_1 = MinValueValidator(1, 'Must be greater than or equal to 1')
 
-def same_option(option):
-	return Option_Model.objects.filter(position=option.position
-		).filter(option_type=option.option_type
-		).filter(strike_price=option.strike_price
-		).filter(stock_price=option.stock_price
-		).filter(traded_price=option.traded_price
-		).filter(interest_rate=option.interest_rate
-		).filter(days_till_exp=option.days_till_exp)
 
-# Create your models here.
 class Option_Model(models.Model):
 	stock_ticker = models.CharField(max_length=20, default='Generic Option')
-	quantity = models.IntegerField(default=1,
-		validators=[MinValueValidator(1, 'Must be greater than or equal to 1')],)
+	quantity = models.IntegerField(default=1, validators=[GREATER_THAN_1],)
 	position = models.IntegerField()
 	option_type = models.CharField(max_length=10, default='Call',
 					choices=(('Call', 'Call'), ('Put', 'Put')),)
-	strike_price = models.FloatField(
-		validators=[MinValueValidator(0, 'Must be greater than or equal to 0.')],)
-	stock_price = models.FloatField(
-		validators=[MinValueValidator(0, 'Must be greater than or equal to 0.')],)
-	traded_price = models.FloatField(
-		validators=[MinValueValidator(0, 'Must be greater than or equal to 0.')],)
-	interest_rate = models.FloatField(
-		validators=[MinValueValidator(0, 'Must be greater than or equal to 0.')],)
+	strike_price = models.FloatField(validators=[GREATER_THAN_0],)
+	stock_price = models.FloatField(validators=[GREATER_THAN_0],)
+	traded_price = models.FloatField(validators=[GREATER_THAN_0],)
+	interest_rate = models.FloatField(validators=[GREATER_THAN_0],)
 	days_till_exp = models.FloatField()
 	iv = models.FloatField(null=True, blank=True)
 	delta = models.FloatField(null=True, blank=True)
@@ -42,6 +30,16 @@ class Option_Model(models.Model):
 		else:
 			position = 'Short'
 		return f'{self.strike_price} {position} {self.option_type}'
+
+	@classmethod
+	def already_exists(cls, option):
+		return cls.objects.filter(position=option.position
+			).filter(option_type=option.option_type
+			).filter(strike_price=option.strike_price
+			).filter(stock_price=option.stock_price
+			).filter(traded_price=option.traded_price
+			).filter(interest_rate=option.interest_rate
+			).filter(days_till_exp=option.days_till_exp)
 
 	def save(self, *args, **kwargs):
 		option = BS(self.stock_price, self.strike_price, self.days_till_exp,
