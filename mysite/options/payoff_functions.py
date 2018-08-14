@@ -4,9 +4,9 @@ def option_payoff(option_type, position, strike_price,
 		position - either 1 or -1 denoting long or short respectively
 	'''
 	if option_type == 'Call':
-		return call_payoff(strike_price, premium, position, quantity, x)
+		return call_payoff(strike_price, premium, position, quantity, stock_price)
 	elif option_type == 'Put':
-		return put_payoff(strike_price, premium, position, quantity, x)
+		return put_payoff(strike_price, premium, position, quantity, stock_price)
 	else:
 		raise ValueError('option_type must be either Call or Put')
 
