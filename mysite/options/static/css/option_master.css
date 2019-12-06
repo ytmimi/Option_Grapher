@@ -21,7 +21,7 @@ form p {
 
 .chart-container{
 	margin-top: 50px;
-	height:400px; 
+	height:400px;
 	width:400px;
 }
 
@@ -32,7 +32,6 @@ form p {
 	/*lighter than the original*/
 	background-color: #396787;
 }
-
 
 .errorlist{
 	padding-left: 0;
@@ -47,23 +46,27 @@ form p {
 }
 
 #greeks{
+	font-size: 75%;
 	margin: auto;
 	margin-bottom: 50px;
-	margin-top: 100px;
+	margin-top: 20px;
 	border-spacing:10px;
 
 }
 
 td, th {
-	height: 50px;
-	width:100px;
 	text-align: center;
 	border-collapse: separate;
-    border-spacing: 15px;
+  border-spacing: 15px;
+}
+.chart-title{
+	margin-top: 40px;
+	text-align: center;
 }
 
-
-th{
+.Option-header{
+	height: 50px;
+	width:80px;
 	background-color: #0E466D;
 	color: white;
 	border-top-right-radius: 15px;
@@ -72,8 +75,9 @@ th{
 	border-left: 2px solid white;
 }
 
-
-td{
+.Option-data{
+	height: 30px;
+	width:100px;
 	border-right:2px solid white;
 	border-left: 2px solid white;
 	border-bottom: 2px solid #0E466D;
@@ -84,10 +88,28 @@ td{
 	display:block;
 }
 
+.data-table{
+	margin-top: 20px;
+}
 
+.data-table-headers{
+	background-color: grey;
+	padding: 2px;
+}
 
-
-
-
-
-
+.ticker-tab{
+	font-size: 80%;
+	heigt: 30px;
+	padding:5px;
+	background-color: #0E466D;
+	color: white;
+	margin-left: 10px;
+	display: inline;
+}
+.data-row{
+	font-size: 80%;
+}
+.custom-btn{
+	font-size: 50%;
+	margin-bottom: 3px;
+}
