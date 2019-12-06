@@ -1,6 +1,12 @@
 from requests_html import HTMLSession
 session = HTMLSession()
 
+def has_option_decorator(func):
+	def wrapper(*args, **kwargs):
+		if args[0].has_options:
+			return func(*args, **kwargs)
+	return wrapper
+
 class Yahoo_Option_Scraper():
 	def __init__(self, ticker, date=None):
 		self.ticker = ticker.upper()
@@ -20,12 +26,10 @@ class Yahoo_Option_Scraper():
 	def get_response(self, url):
 		return session.get(url)
 
+	@has_option_decorator
 	def get_company_name(self):
-		try:
-			data = self.response.html.find('div#quote-header-info > div > div > div > h1')[0].text
-		except:
-			data = None
-		return data
+		return self.response.html.find(
+				'div#quote-header-info > div > div > div > h1')[0].text
 
 	def get_exp_dates(self):
 		# <div class="Fl(start) Pend(18px) option-contract-control drop-down-selector">
@@ -36,34 +40,36 @@ class Yahoo_Option_Scraper():
 			dates[date.text] = date.attrs['value']
 		return dates
 
+	@has_option_decorator
 	def get_stock_price(self):
 		#used Chrome inspect tools to find what span to call
 		# <span class="Trsdu(0.3s) Fw(b) Fz(36px) Mb(-4px) D(ib)" data-reactid="35">16.25</span>
-		return self.response.html.find('span[data-reactid="35"]')[0].text
+		return self.response.html.find(
+			'div#quote-header-info > div:nth-child(3) > div > div > span'
+		)[0].text
+		# return self.response.html.find('span[data-reactid="35"]')[0].text
 
+	@has_option_decorator
 	def get_option_table(self, call=True):
 		#example from finance.yahoo.com/quote/{ticker}/options?p={ticker}
 		#<table class="calls table-bordered W(100%) Pos(r) Bd(0) Pt(0) list-options" data-reactid="42">
 		#<table class="puts table-bordered W(100%) Pos(r) list-options" data-reactid="343">
-		if self.has_options:
-			if call: opt_class = 'calls'
-			else: opt_class = 'puts'
-			try:
-				table = self.response.html.find(f'table.{opt_class}.table-bordered')[0]
-			except IndexError:
-				response = self.get_response(self.base)
-				table = response.html.find(f'table.{opt_class}.table-bordered')[0]
-
+		opt_class = self.opt_class(call)
+		#try and except because sometimes a compnay will just have calls or puts
+		try:
+			table = self.response.html.find(f'table.{opt_class}.list-options')[0]
 			table_head = table.find('thead > tr')[0]
-
-			data = {}
-			for th in table_head.find('th'):
-				data[th.text] = []
-
+			data = {t_head.text:[] for t_head in table_head.find('th')}
 			table_body = table.find('tbody')[0]
 			for row in table_body.find('tr'):
 				for i, col in enumerate(row.find('td')):
 					data[list(data.keys())[i]].append(col.text)
 			return data
-		else:
+		except Exception as e:
 			return None
+
+
+	def opt_class(self, value: bool):
+		if value:
+			return 'calls'
+		return 'puts'
