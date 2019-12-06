@@ -1,0 +1,53 @@
+<table id='greeks'>
+  <thead>
+    <th class="Option-header">Position</th>
+    <th class="Option-header">Type</th>
+    <th class="Option-header">Quantity</th>
+    <th class="Option-header">Strike Price</th>
+    <th class="Option-header">Stock Price</th>
+    <th class="Option-header">Option Price</th>
+    <th class="Option-header">Interest rate</th>
+    <th class="Option-header">Days Till Expiration</th>
+    <th class="Option-header">Implied Volatility</th>
+    <th class="Option-header">Delta</th>
+    <th class="Option-header">Gamma</th>
+    <th class="Option-header">Vega</th>
+    <th class="Option-header">Theta</th>
+    <th class="Option-header">Rho</th>
+  </thead>
+  <tbody>
+    {% if model %}
+    {% for option in model %}
+      <tr>
+        <td class="Option-data">{{option.position}}</td>
+        <td class="Option-data">{{option.option_type}}</td>
+        <td class="Option-data">{{option.quantity}}</td>
+        <td class="Option-data">{{option.strike_price}}</td>
+        <td class="Option-data">{{option.stock_price}}</td>
+        <td class="Option-data">{{option.traded_price}}</td>
+        <td class="Option-data">{{option.interest_rate}}</td>
+        <td class="Option-data">{{option.days_till_exp}}</td>
+        <td class="Option-data">{{option.iv}}</td>
+        <td class="Option-data">{{option.delta}}</td>
+        <td class="Option-data">{{option.gamma}}</td>
+        <td class="Option-data">{{option.vega}}</td>
+        <td class="Option-data">{{option.theta}}</td>
+        <td class="Option-data">{{option.rho}}</td>
+        <td class="Option-data">
+          <a class="btn btn-danger remove-btn">Remove</a>
+        </td>
+      </tr>
+      {% endfor %}
+      {% else %}
+      <td class="Option-data" colspan="14">
+        Use the form above to add options
+      </td>
+      {% endif %}
+  </tbody>
+</table>
+
+{% comment %}
+<td class="Option-data">
+  <a class="btn btn-danger" href="{% url 'options:delete_option' pk=option.pk%}">Remove</a>
+</td>
+{% endcomment %}

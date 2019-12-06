@@ -3,7 +3,6 @@
 {% load options_filters %}
 {% load staticfiles %}
 
-
 {% block content %}
 	<!-- form -->
 	<div class="col-lg-4 col-md-6">
@@ -17,73 +16,29 @@
 	<!-- Chart -->
 	<div class="col-lg-8 col-md-6 chart-container">
 		<canvas id="option_chart"></canvas>
+		<input id="contractCheckbox" type="checkbox" name="full-contract">
+		<label class="helptext" style="display:inline;" for="full-contract">Contract / Single Option </label>
+		<p class="helptext">Contract based on 100 options</p>
 	</div>
-
-	<!-- passes data variables to js -->
-	{% if payoff %}
-	<script type="text/javascript">
-		var payoff = JSON.parse("{{payoff}}".replace(/(&quot\;)/g,"\""));
-	</script>
-	{% else %}
-	<script type="text/javascript">
-		var payoff = [{x:0, y:0},]
-	</script>
-	{% endif %}
-
-	<!-- Table full of Greek information -->
-	{% if model %}
-	<div class="col-md-12">
-		<table id='greeks'>
-			<thead>
-				<th>Position</th>
-				<th>Type</th>
-				<th>Quantity</th>
-				<th>Strike Price</th>
-				<th>Stock Price</th>
-				<th>Option Price</th>
-				<th>Interest rate</th>
-				<th>Days Till Expiration</th>
-				<th>Implied Volatility</th>
-				<th>Delta</th>
-				<th>Gamma</th>
-				<th>Vega</th>
-				<th>Theta</th>
-				<th>Rho</th>
-
-			</thead>
-			<tbody>
-				{% for option in model %}
-				<tr>
-					{% if option.position == 1 %}
-					<td>Long</td>
-					{% else %}
-					<td>Short</td>
-					{% endif %}
-					<td>{{option.option_type}}</td>
-					<td>{{option.quantity}}</td>
-					<td>{{option.strike_price}}</td>
-					<td>{{option.stock_price}}</td>
-					<td>{{option.traded_price}}</td>
-					<td>{{option.interest_rate}}</td>
-					<td>{{option.days_till_exp}}</td>
-					<td>{{option.iv}}</td>
-					<td>{{option.delta}}</td>
-					<td>{{option.gamma}}</td>
-					<td>{{option.vega}}</td>
-					<td>{{option.theta}}</td>
-					<td>{{option.rho}}</td>
-					<td>
-						<a class="btn btn-danger" href="{% url 'options:delete_option' pk=option.pk%}">Remove</a>
-					</td>
-				</tr>
-				{% endfor%}
-			</tbody>
-		</table>
+	<!-- Ticker Tabs and Data Table -->
+	<div class="data-table">
+		<div class="data-table-headers">
+			<div class="ticker-tab">GENERIC OPTION</div>
+		{% for ticker in all_tickers %}
+			{% if ticker != "GENERIC OPTION"%}
+				<div class="ticker-tab">{{ticker}}</div>
+			{% endif %}
+		{% endfor %}
+		</div>
+			{% include 'options/_option_detail_table.html' %}
+		</div>
 	</div>
-	{% endif %}
+	<p class="helptext">** Greeks and Implied Volatility calculated using Black Scholes</p>
+	{% endblock %}
 
-
-
-
+	{% block script_block %}
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.4.0/Chart.min.js"></script>
-{% endblock %}
+	<script src="{% static 'js/option_payoff.js' %}"></script>
+	<script src="{% static 'js/options_master.js' %}"></script>
+	<script src="{% static 'js/ticker_request.js' %}"></script>
+	{% endblock %}

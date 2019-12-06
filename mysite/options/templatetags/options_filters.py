@@ -18,19 +18,27 @@ def multiply(a, b):
 
 
 @register.inclusion_tag('templatetags/add_table.html')
-def table_from_dict(some_dict):
-	key = list(some_dict.keys())[0]
-	num_of_rows = len(some_dict[key])
+def table_from_dict(input: dict):
+	table = input['table']
+	html_id = input['id']
+	key = list(table.keys())[0]
+	num_of_rows = len(table[key])
 
 	row = []
 	for i in range(num_of_rows):
 		col = []
-		for key in some_dict.keys():
-			col.append(some_dict[key][i])
+		for key in table.keys():
+			col.append(table[key][i])
 		row.append(col)
 
 	return {
-		'header': [x for x in some_dict.keys()],
+		'header': [x for x in table.keys()],
 		'rows': row,
+		'id':html_id
 	}
 
+@register.filter(name='set_selector_value', is_safe=True)
+def set_selector_value(exp_dates: dict, date):
+	for text, timestamp in exp_dates.items():
+		if timestamp == date:
+			return text

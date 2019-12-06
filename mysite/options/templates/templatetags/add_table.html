@@ -1,14 +1,22 @@
-<table>
+<table id="{{id}}">
 	<thead>
 		{% for head in header %}
-			<th>{{head}}</th>
+			<th id="{{head}}"class="Option-header">{{head}}</th>
 		{% endfor %}
 	</thead>
 	<tbody>
 		{% for row in rows %}
-		<tr>
+		<tr class="data-row">
 			{% for col in row %}
-			<td>{{col}}</td>
+				{% if forloop.counter == 1 %}
+					<td class="Option-data">
+						{{col}}
+						<button class="btn btn-primary custom-btn Long" name="button">Long</button>
+						<button class="btn btn-primary custom-btn Short" name="button">Short</button
+					</td>
+				{% else %}
+					<td class="Option-data">{{col}}</td>
+				{% endif %}
 			{% endfor %}
 		</tr>
 		{% endfor %}

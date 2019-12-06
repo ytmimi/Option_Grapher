@@ -6,8 +6,8 @@
 {% block content %}
 <div class="col-md-8">
 {% if name %}
-	<h1>{{name}}</h1> 
-	<h4>Last traded at: ${{stock_price}}</h4>
+	<h1 id="Company">{{name}}</h1>
+	<h4>Last traded at: $<span id="stock-price">{{stock_price}}</span></h4>
 {% else %}
 	<h1>Search stock tickers for a list of options</h1>
 {% endif %}
@@ -18,30 +18,34 @@
 	{% csrf_token %}
 	{{form}}
 	{% if exp_dates %}
-	<select name="dates">
+	<select id="expiratoin-selector" name="dates" value="{{date}}">
+
 		{% for key in exp_dates %}
 		<option value="{{exp_dates|dict_key:key}}">{{key}}</option>
 		{% endfor %}
 	</select>
 	{% endif %}
 	<input class="btn btn-dark" type="submit" value="Search Stock">
-	
+
 </form>
 </div>
 
 <div class="row">
 	<div class="col col-12">
-		{% if calls %}
-			<h1>Calls</h1>
+		{% if calls.table %}
+			<h1 class="chart-title">Calls</h1>
 			{% table_from_dict calls %}
 		{% endif %}
 	</div>
 	<div class="col col-12">
-		{% if puts %}
-			<h1>Puts</h1>
+		{% if puts.table %}
+			<h1 class="chart-title">Puts</h1>
 			{% table_from_dict puts %}
 		{% endif %}
 	</div>
 </div>
+{% endblock %}
 
+{% block script_block %}
+<script type="text/javascript" src="{% static 'js/search_table.js' %}" charset="utf-8"></script>
 {% endblock %}
