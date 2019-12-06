@@ -6,8 +6,6 @@ from options.models import Option_Model
 from options.serializers import option_chart_data
 from options.scrape_data import Yahoo_Option_Scraper
 
-
-
 def delete_option(request, pk):
 	option = Option_Model.objects.filter(pk=pk)
 	option.delete()
@@ -22,19 +20,21 @@ def option_input(request):
 			position = form.cleaned_data['position']
 			s = form.cleaned_data['stock_price']
 			k = form.cleaned_data['strike_price']
-			t = form.cleaned_data['days_till_exp']
+			t = form.cleaned_data['expiration_date']
 			p = form.cleaned_data['traded_price']
 			r = form.cleaned_data['interest_rate']
 			type_ = form.cleaned_data['option_type']
 
 			option_model = Option_Model(quantity=quantity, position=position,option_type=type_,
-				strike_price=k, stock_price=s,traded_price=p,interest_rate=r,days_till_exp=t,)
+				strike_price=k, stock_price=s,traded_price=p,interest_rate=r,expiration_date=t,)
 			if len(Option_Model.already_exists(option_model)) == 0:
+				option_model.set_days_till_expiration()
 				option_model.save()
 
 	data = {'form': form,
-			'model': Option_Model.objects.all(),
-			'payoff': option_chart_data(),}
+			'model': Option_Model.objects.filter(stock_ticker='GENERIC OPTION'),
+			'all_tickers': Option_Model.all_tickers(),
+			}
 	return render(request, 'options/options_forms.html', data)
 
 def stock_option_search(request):
@@ -42,10 +42,10 @@ def stock_option_search(request):
 		form = Search_Form(request.POST)
 		if form.is_valid():
 			ticker = form.cleaned_data['search']
-			try:
-				date = request.POST['dates']
+			date = request.POST.get('dates')
+			if date != None:
 				scraper = Yahoo_Option_Scraper(ticker, date)
-			except KeyError:
+			else:
 				scraper = Yahoo_Option_Scraper(ticker)
 
 			data = {'form': form,
@@ -53,8 +53,9 @@ def stock_option_search(request):
 				'name': scraper.get_company_name(),
 				'stock_price': scraper.get_stock_price(),
 				'exp_dates':scraper.exp_dates,
-				'calls': scraper.get_option_table(),
-				'puts':	scraper.get_option_table(call=False),
+				'date': date,
+				'calls': {'table':scraper.get_option_table(), 'id':'Call'},
+				'puts':	{'table':scraper.get_option_table(call=False), 'id':'Put'},
 			}
 			return render(request, 'options/options_scrape_form.html', data)
 

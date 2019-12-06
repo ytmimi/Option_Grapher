@@ -8,7 +8,7 @@ def option_chart_data():
 	for option in Option_Model.objects.all():
 		option_list.append(
 			{'type':option.option_type,
-			'pos':option.position,
+			'pos':option.convert_position(),
 			'strike':option.strike_price,
 			'price':option.traded_price,
 			'quantity':option.quantity, })

@@ -1,10 +1,9 @@
 import datetime as dt
 from django import forms
 from django.forms import ValidationError
-from options.models import Option_Model
+from options.models import Option_Model, DATE_INPUTS
 
 RF_URL = 'https://www.treasury.gov/resource-center/data-chart-center/interest-rates/Pages/TextView.aspx?data=yield'
-
 
 class Search_Form(forms.Form):
 	search = forms.CharField(label='',
@@ -12,37 +11,23 @@ class Search_Form(forms.Form):
 
 
 class Option_Form(forms.ModelForm):
-	position = forms.ChoiceField(choices=(('Long', 'Long'), ('Short', 'Short')))
-
 	#Current 1 Year Treasury Rate: 2.35% At market close Wed Jun 13, 2018
 	interest_rate = forms.FloatField(initial=.0235, min_value=0, max_value=1,
 		help_text= f'Reference for <a href="{RF_URL}">Treasury Rates</a>',
 		error_messages={
 			'max_value': 'Must be less than or equal to 1.',
 			'min_value': 'Must be greater than or equal to 0.',
-		},)
-	days_till_exp = forms.DateField(label='Expiration Date',
-		input_formats=[
-			'%m/%d/%Y', '%m/%d/%y', '%m-%d-%Y', '%m-%d-%y',
-			'%-m/%d/%Y', '%-m/%d/%y', '%-m-%d-%Y', '%-m-%d-%y',
-			'%m/%-d/%Y', '%m/%-d/%y', '%m-%-d-%Y', '%m-%-d-%y',
-			'%-m/%-d/%Y', '%-m/%-d/%y', '%-m-%-d-%Y', '%-m-%-d-%y'],
-		error_messages={'invalid': 'Use date format: Month/Day/Year or Month-Day-Year'})
+			},)
+	expiration_date = forms.DateField(label='Expiration Date', input_formats = DATE_INPUTS,
+		error_messages = {'invalid': 'Use date format: Month/Day/Year or Month-Day-Year'})
 
 	class Meta:
 		model = Option_Model
 		fields = ('position', 'option_type', 'quantity', 'strike_price',
-				'stock_price','traded_price', 'interest_rate', 'days_till_exp')
+				'stock_price','traded_price', 'interest_rate', 'expiration_date')
 
-	def clean_position(self):
-		if self.cleaned_data['position'] == 'Long':
-			return 1
-		return -1
-
-	def clean_days_till_exp(self):
-		expiration = self.cleaned_data['days_till_exp']
-		now = dt.date.today()
-		diff = (expiration - now).days
-		if diff >=0:
-			return diff
+	def clean_expiration_date(self):
+		expiration = self.cleaned_data['expiration_date']
+		if (expiration - dt.date.today()).days >=0:
+			return expiration
 		raise ValidationError('Sorry, expired options can\'t be analysed.')
